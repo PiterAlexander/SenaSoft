@@ -1,54 +1,53 @@
-const input = document.getElementById("img_file");
-const canvas = document.getElementById("imagen");
-const ctx = canvas.getContext("2d");
+const input1 = document.getElementById("img_file1");
+const input2 = document.getElementById("img_file2");
+const input3 = document.getElementById("img_file3");
+const input4 = document.getElementById("img_file4");
+var canvas;
+var ctx;
 
-// fetch("https://eastus.tts.speech.microsoft.com/cognitiveservices/v1", {
-//   method: "POST",
-//   headers: {
-//     "X-Microsoft-OutputFormat": "audio-16khz-128kbitrate-mono-mp3",
-//     "Ocp-Apim-Subscription-Key": "5b894e15f0e04b9e8453209c394e5ca7",
-//     "Content-Type": "application/ssml+xml",
-//   },
-//   body: `<speak version="1.0" xml:lang="en-US">
-//   <voice xml:lang="en-US" xml:gender="Female" name="en-US-AriaNeural">Hola Mundo!</voice>
-// </speak>`,
-//   outFile: "output.wav",
-// })
-//   .then((res) => res.blob())
-//   .then((data) => {
-//     const audio = document.createElement("a");
-//     audio.textContent = "Test";
-//     console.log(data);
-//     audio.href = URL.createObjectURL(data);
-//     document.body.appendChild(audio);
-//   })
-//   .catch((err) => console.log(err));
+input1.addEventListener("change", async (event) => {
+  callMethod(event, 1);
+});
+input2.addEventListener("change", async (event) => {
+  callMethod(event, 2);
+});
+input3.addEventListener("change", async (event) => {
+  callMethod(event, 3);
+});
+input4.addEventListener("change", async (event) => {
+  callMethod(event, 4);
+});
 
-input.addEventListener("change", async (event) => {
-  const archivo = event.target.files[0];
-  const reader = new FileReader();
+async function callMethod(event, number) {
+  canvas = document.getElementById(`imagen${number}`);
+  ctx = canvas.getContext("2d");
+  var arrayBuffer;
   let base64Code = "";
+  if (number != 3) {
+    const archivo = event.target.files[0];
+    const reader = new FileReader();
 
-  reader.addEventListener("loadend", () => {
-    base64Code = reader.result;
-  });
+    reader.addEventListener("loadend", () => {
+      base64Code = reader.result;
+    });
 
-  reader.readAsDataURL(archivo);
+    reader.readAsDataURL(archivo);
 
-  const arrayBuffer = await archivo.arrayBuffer();
-
+    arrayBuffer = await archivo.arrayBuffer();
+  }
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const img = new Image();
-  img.src = base64Code;
+  img.src = number == 3 ? input3.value : base64Code;
 
   img.onload = () => {
     ctx.drawImage(img, 0, 0);
   };
-  await imageAnalyze(arrayBuffer);
-  await imageClassify(arrayBuffer);
-});
 
-const imageAnalyze = async (arrayBuffer) => {
+  // await imageAnalyze(arrayBuffer, number);
+  await imageClassify(arrayBuffer, number);
+}
+
+const imageAnalyze = async (arrayBuffer, number) => {
   url =
     "https://compuitervisionforretoia.cognitiveservices.azure.com/vision/v3.2/analyze?visualFeatures=Categories,Description,Objects";
 
@@ -83,7 +82,7 @@ const imageAnalyze = async (arrayBuffer) => {
           ctx.fillRect(x, y, w, h);
         });
       }
-      translateService("en", imageDescription, "analyze");
+      translateService("en", imageDescription, "analyze", number);
     })
     .catch((e) => {
       console.error("Error: " + e);
@@ -91,20 +90,24 @@ const imageAnalyze = async (arrayBuffer) => {
     });
 };
 
-const imageClassify = async (arrayBuffer) => {
-  const tablaProbabilidades = document.getElementById("info");
-  url =
-    "https://retoiaservices.cognitiveservices.azure.com/customvision/v3.0/Prediction/f8e5a4ef-0bf6-4136-a545-f1a7cf4490bf/classify/iterations/Iteration5/image";
+const imageClassify = async (arrayBuffer, number) => {
+  const data = { Url: "" + input3.value + "" };
+  const tablaProbabilidades = document.getElementById(`info${number}`);
+  classifyByurl =
+    "https://retoiaservices.cognitiveservices.azure.com/customvision/v3.0/Prediction/f8e5a4ef-0bf6-4136-a545-f1a7cf4490bf/classify/iterations/Iteration5/url";
 
+  classifyByImage =
+    "https://retoiaservices.cognitiveservices.azure.com/customvision/v3.0/Prediction/f8e5a4ef-0bf6-4136-a545-f1a7cf4490bf/classify/iterations/Iteration5/image";
   headers = {
     "Prediction-Key": "3b2847d34e1b4f57a130116a64f3f45e",
-    "Content-Type": "application/octet-stream",
+    "Content-Type":
+      number == 3 ? "application/json" : "application/octet-stream",
   };
 
-  fetch(url, {
+  fetch(number == 3 ? classifyByurl : classifyByImage, {
     method: "POST",
     headers: headers,
-    body: arrayBuffer,
+    body: number == 3 ? JSON.stringify(data) : arrayBuffer,
   })
     .then((response) => response.json())
     .then((data) => {
@@ -128,7 +131,7 @@ const imageClassify = async (arrayBuffer) => {
         data.predictions[0]["tagName"] +
         " en la imágen que nos proporcionaste";
 
-      translateService("es", message, "tabla");
+      translateService("es", message, "tabla", number);
     })
     .catch((e) => {
       console.error("Error: " + e);
@@ -136,8 +139,8 @@ const imageClassify = async (arrayBuffer) => {
     });
 };
 
-const translateService = async (from = "es", message, llamada) => {
-  const tablaTraducciones = document.getElementById("tradu");
+const translateService = async (from = "es", message, llamada, number) => {
+  const tablaTraducciones = document.getElementById(`tradu${number}`);
   const toLanguage = ["en", "es", "fr", "zh-Hans"];
   const languages = ["Inglés", "Español", "Francés", "Chino"];
 
@@ -188,7 +191,9 @@ const translateService = async (from = "es", message, llamada) => {
             tablaTraducciones.appendChild(registro);
           });
         } else {
-          const description = document.getElementById("image_description");
+          const description = document.getElementById(
+            `image_description${number}`
+          );
           description.textContent = data[0].translations[1].text;
           console.log(data[0].translations[1]);
         }

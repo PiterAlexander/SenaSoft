@@ -95,7 +95,7 @@ figure {
 }
 hr {
   box-sizing: content-box;
-  height: 0;
+  height: 20px;
 }
 pre {
   overflow: auto;
@@ -323,7 +323,7 @@ hr {
   margin-top: 25px;
   margin-bottom: 25px;
   border: 0;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #0a0808;
 }
 .sr-only {
   position: absolute;
