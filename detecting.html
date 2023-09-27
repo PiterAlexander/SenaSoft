@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <meta content="description" name="description" />
+    <meta name="google" content="notranslate" />
+    <meta
+      content="Mashup templates have been developped by Orson.io team"
+      name="author"
+    />
+
+    <!-- Disable tap highlight on IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assets/apple-icon-180x180.png"
+    />
+    <link href="./assets/Primary-Icon-Dark.png" rel="icon" />
+
+    <link href="" rel="stylesheet" />
+
+    <title>The Mind´s Eyes</title>
+
+    <link href="./main.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <!-- Add your content of header -->
+    <header>
+      <nav class="navbar navbar-default active">
+        <div class="container">
+          <div class="navbar-header">
+            <button
+              type="button"
+              class="navbar-toggle collapsed"
+              data-toggle="collapse"
+              data-target="#navbar-collapse"
+              aria-expanded="false"
+            >
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="./index.html" title="">
+              <img
+                src="./assets/Primary-Icon.png"
+                class="navbar-logo-img"
+                alt=""
+                width="40px"
+              />
+              The Mind's Eyes
+            </a>
+          </div>
+
+          <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="./index.html" title="">Inicio</a></li>
+              <li><a href="./project.html" title="">Proyecto</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="section-container">
+      <div class="container w-100">
+        <h1 class="text-center mb-5">Detector de Objetos</h1>
+        <hr />
+        <div class="row w-100">
+          <div class="col-xs-12 col-md-5">
+            <div class="row">
+              <div id="image_container" class="form-group text-center">
+                <h2 class="text-center">Imagen 1</h2>
+                <canvas id="imagen1" width="500" height="500"
+                  ><img
+                    src=""
+                    alt=""
+                    id="img"
+                    class="img-rounded"
+                    width="500"
+                    height="500"
+                /></canvas>
+                <input
+                  type="file"
+                  accept="jpeg,png,bmp"
+                  name="img_file1"
+                  id="img_file1"
+                  class="form-control mt-3"
+                />
+              </div>
+            </div>
+            <div class="row text-center">
+              <div id="info_image1">
+                <h2>Descripción</h2>
+                <textarea
+                  name="image_description1"
+                  id="image_description1"
+                  cols="55"
+                  rows="1"
+                  readonly
+                ></textarea>
+              </div>
+              <h2>Traducción</h2>
+              <table class="table table-dark table-hover mt-3 text-center mx-1">
+                <thead>
+                  <tr>
+                    <th class="col-3 text-center">Idioma</th>
+                    <th class="col-6 text-center">Texto</th>
+                    <th class="col-3 text-center">Audio</th>
+                  </tr>
+                </thead>
+                <tbody id="tradu1"></tbody>
+              </table>
+              <audio src="" id="audio" autoplay></audio>
+            </div>
+          </div>
+          <div class="col-xs-12 col-md-2"></div>
+          <div class="col-xs-12 col-md-5">
+            <div class="row">
+              <div id="image_container" class="form-group text-center">
+                <h2 class="text-center">Imagen 2</h2>
+                <canvas id="imagen2" width="500" height="500"
+                  ><img
+                    src=""
+                    alt=""
+                    id="img"
+                    class="img-rounded"
+                    width="500"
+                    height="500"
+                /></canvas>
+                <input
+                  type="file"
+                  accept="jpeg,png,bmp"
+                  name="img_file2"
+                  id="img_file2"
+                  class="form-control mt-3"
+                />
+              </div>
+            </div>
+            <div class="row text-center">
+              <div id="info_image2">
+                <h2>Descripción</h2>
+                <textarea
+                  name="image_description2"
+                  id="image_description2"
+                  cols="55"
+                  rows="1"
+                  readonly
+                ></textarea>
+              </div>
+              <h2>Traducción</h2>
+              <table class="table table-dark table-hover mt-3 text-center mx-1">
+                <thead>
+                  <tr>
+                    <th class="col-3 text-center">Idioma</th>
+                    <th class="col-6 text-center">Texto</th>
+                    <th class="col-3 text-center">Audio</th>
+                  </tr>
+                </thead>
+                <tbody id="tradu2"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="row w-100">
+          <div class="col-xs-12 col-md-5">
+            <div class="row">
+              <div id="image_container" class="form-group text-center">
+                <h2 class="text-center">Imagen 3</h2>
+                <canvas id="imagen3" width="500" height="500"
+                  ><img
+                    src=""
+                    alt=""
+                    id="img"
+                    class="img-rounded"
+                    width="500"
+                    height="500"
+                /></canvas>
+                <input
+                  type="text"
+                  name="img_file3"
+                  id="img_file3"
+                  class="form-control mt-3"
+                />
+              </div>
+            </div>
+            <div class="row text-center">
+              <div id="info_image3">
+                <h2>Descripción</h2>
+                <textarea
+                  name="image_description3"
+                  id="image_description3"
+                  cols="55"
+                  rows="1"
+                  readonly
+                ></textarea>
+              </div>
+              <h2>Traducción</h2>
+              <table class="table table-dark table-hover mt-3 text-center mx-1">
+                <thead>
+                  <tr>
+                    <th class="col-3 text-center">Idioma</th>
+                    <th class="col-6 text-center">Texto</th>
+                    <th class="col-3 text-center">Audio</th>
+                  </tr>
+                </thead>
+                <tbody id="tradu3"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-xs-12 col-md-2"></div>
+          <div class="col-xs-12 col-md-5">
+            <div class="row">
+              <div id="image_container" class="form-group text-center">
+                <h2 class="text-center">Imagen 4</h2>
+
+                <canvas id="imagen4" width="500" height="500"
+                  ><img
+                    src=""
+                    alt=""
+                    id="img"
+                    class="img-rounded"
+                    width="500"
+                    height="500"
+                /></canvas>
+                <input
+                  type="file"
+                  accept="jpeg,png,bmp"
+                  name="img_file4"
+                  id="img_file4"
+                  class="form-control mt-3"
+                />
+              </div>
+            </div>
+            <div class="row text-center">
+              <div id="info_image4">
+                <h2>Descripción</h2>
+                <textarea
+                  name="image_description4"
+                  id="image_description4"
+                  cols="55"
+                  rows="1"
+                  readonly
+                ></textarea>
+              </div>
+
+              <h2>Traducción</h2>
+              <table class="table table-dark table-hover mt-3 text-center mx-1">
+                <thead>
+                  <tr>
+                    <th class="col-3 text-center">Idioma</th>
+                    <th class="col-6 text-center">Texto</th>
+                    <th class="col-3 text-center">Audio</th>
+                  </tr>
+                </thead>
+                <tbody id="tradu4"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer-container white-text-container">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12">
+            <h3>The Mind´s Eyes</h3>
+
+            <div class="row">
+              <div class="col-xs-12 col-sm-7">
+                <p>&lt;<strong>SENA</strong>/Soft&gt; 2023</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function (event) {
+        navActivePage();
+        scrollRevelation(".reveal");
+      });
+    </script>
+
+    <script type="text/javascript" src="./main.js"></script>
+    <script src="./services.js"></script>
+  </body>
+</html>

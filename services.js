@@ -1,3 +1,4 @@
+const URLactual = window.location.toString();
 const input1 = document.getElementById("img_file1");
 const input2 = document.getElementById("img_file2");
 const input3 = document.getElementById("img_file3");
@@ -43,23 +44,27 @@ async function callMethod(event, number) {
     ctx.drawImage(img, 0, 0);
   };
 
-  // await imageAnalyze(arrayBuffer, number);
-  await imageClassify(arrayBuffer, number);
+  await imageAnalyze(arrayBuffer, number);
+  if (URLactual.includes("analize.html")) {
+    await imageClassify(arrayBuffer, number);
+  }
 }
 
 const imageAnalyze = async (arrayBuffer, number) => {
+  const data = { Url: "" + input3.value + "" };
   url =
     "https://compuitervisionforretoia.cognitiveservices.azure.com/vision/v3.2/analyze?visualFeatures=Categories,Description,Objects";
 
   headers = {
     "Ocp-Apim-Subscription-Key": "20b98d0827694797a0ade6d16d261a79",
-    "Content-Type": "application/octet-stream",
+    "Content-Type":
+      number == 3 ? "application/json" : "application/octet-stream",
   };
 
   fetch(url, {
     method: "POST",
     headers: headers,
-    body: arrayBuffer,
+    body: number == 3 ? JSON.stringify(data) : arrayBuffer,
   })
     .then((response) => response.json())
     .then(async (data) => {
@@ -82,7 +87,13 @@ const imageAnalyze = async (arrayBuffer, number) => {
           ctx.fillRect(x, y, w, h);
         });
       }
-      translateService("en", imageDescription, "analyze", number);
+
+      translateService(
+        "en",
+        imageDescription,
+        URLactual.includes("detecting.html") ? "tabla" : "analyze",
+        number
+      );
     })
     .catch((e) => {
       console.error("Error: " + e);
@@ -94,10 +105,10 @@ const imageClassify = async (arrayBuffer, number) => {
   const data = { Url: "" + input3.value + "" };
   const tablaProbabilidades = document.getElementById(`info${number}`);
   classifyByurl =
-    "https://retoiaservices.cognitiveservices.azure.com/customvision/v3.0/Prediction/f8e5a4ef-0bf6-4136-a545-f1a7cf4490bf/classify/iterations/Iteration5/url";
+    "https://retoiaservices.cognitiveservices.azure.com/customvision/v3.0/Prediction/f8e5a4ef-0bf6-4136-a545-f1a7cf4490bf/classify/iterations/Iteration8/url";
 
   classifyByImage =
-    "https://retoiaservices.cognitiveservices.azure.com/customvision/v3.0/Prediction/f8e5a4ef-0bf6-4136-a545-f1a7cf4490bf/classify/iterations/Iteration5/image";
+    "https://retoiaservices.cognitiveservices.azure.com/customvision/v3.0/Prediction/f8e5a4ef-0bf6-4136-a545-f1a7cf4490bf/classify/iterations/Iteration8/image";
   headers = {
     "Prediction-Key": "3b2847d34e1b4f57a130116a64f3f45e",
     "Content-Type":
@@ -111,6 +122,7 @@ const imageClassify = async (arrayBuffer, number) => {
   })
     .then((response) => response.json())
     .then((data) => {
+      console.log("Data: ", data);
       tablaProbabilidades.textContent = "";
       data.predictions.forEach((element) => {
         const registro = document.createElement("tr");
@@ -162,6 +174,13 @@ const translateService = async (from = "es", message, llamada, number) => {
       .then((response) => response.json())
       .then((data) => {
         if (llamada == "tabla") {
+          if (!url.includes("analize.html")) {
+            const description = document.getElementById(
+              `image_description${number}`
+            );
+            description.textContent = data[0].translations[1].text;
+            console.log(data[0].translations[1]);
+          }
           tablaTraducciones.textContent = "";
           console.log(data);
           data[0].translations.forEach((element, index) => {
