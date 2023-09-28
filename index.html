@@ -14,11 +14,6 @@
     <!-- Disable tap highlight on IE -->
     <meta name="msapplication-tap-highlight" content="no" />
 
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="./assets/apple-icon-180x180.png"
-    />
     <link href="./assets/Primary-Icon-Dark.png" rel="icon" />
 
     <link href="" rel="stylesheet" />
@@ -237,7 +232,61 @@
         </div>
       </div>
     </div>
+    <div class="container">
+      <br />
+      <!-- Boton -->
+      <button data-toggle="modal" href="#mi_modal" class="btn btn-primary" onclick="showBot()">
+        Abrir ChatBot
+      </button>
+      <br /><br />
+      <!-- Link -->
 
+      <!-- si se necesita cambiar tamaño de modal agregar modal-lg a la linea 
+      <div class="modal-dialog"> por <div class="modal-dialog modal-lg">-->
+
+      <!-- Modal-->
+      <div
+        class="modal fade"
+        id="mi_modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="myModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true">&times;</span
+                ><span class="sr-only">Cerrar</span>
+              </button>
+              <h3 class="modal-title" id="myModalLabel">ChatBot</h3>
+            </div>
+            <div class="modal-body text-center hidden" id="divBot">
+              <div
+                class="chat-container h-100 p-3"
+                id="chatBox"
+                style="height: 300px; overflow-y: auto"
+              ></div>
+              <div class="input-group">
+                <input
+                  type="text"
+                  name="messageInput"
+                  id="messageInput"
+                  class="form-control"
+                  placeholder="Escribe tu pregunta aquí"
+                />
+                <div class="input-group-append">
+                  <button type="button" class="btn btn-primary" id="sendButton">
+                    Enviar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script>
       document.addEventListener("DOMContentLoaded", function (event) {
         navbarFixedTopAnimation();
@@ -282,5 +331,7 @@
 
 -->
     <script type="text/javascript" src="./main.js"></script>
+    <script type="text/javascript" src="./services.js"></script>
+
   </body>
 </html>

@@ -3,6 +3,16 @@ const input1 = document.getElementById("img_file1");
 const input2 = document.getElementById("img_file2");
 const input3 = document.getElementById("img_file3");
 const input4 = document.getElementById("img_file4");
+const chatBox = document.getElementById("chatBox");
+const messageInput = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
+
+sendButton.addEventListener("click", sendMessage);
+messageInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    sendMessage();
+  }
+});
 var canvas;
 var ctx;
 
@@ -87,13 +97,9 @@ const imageAnalyze = async (arrayBuffer, number) => {
           ctx.fillRect(x, y, w, h);
         });
       }
-
-      translateService(
-        "en",
-        imageDescription,
-        URLactual.includes("detecting.html") ? "tabla" : "analyze",
-        number
-      );
+      if (URLactual.includes("detecting.html")) {
+        translateService("en", imageDescription, "tabla", number);
+      }
     })
     .catch((e) => {
       console.error("Error: " + e);
@@ -139,9 +145,12 @@ const imageClassify = async (arrayBuffer, number) => {
         tablaProbabilidades.appendChild(registro);
       });
       const message =
-        "Hemos encontrado al menos un(a) " +
-        data.predictions[0]["tagName"] +
-        " en la imágen que nos proporcionaste";
+        data.predictions[0]["tagName"] != "Negative"
+          ? `Hemos encontrado al menos un${
+              (data.predictions[0]["tagName"] != "Persona" ? " " : "a ") +
+              data.predictions[0]["tagName"]
+            } en la imágen que nos proporcionaste`
+          : "No hemos detectado una entidad conocida en la imágen que nos proporcionaste";
 
       translateService("es", message, "tabla", number);
     })
@@ -153,8 +162,8 @@ const imageClassify = async (arrayBuffer, number) => {
 
 const translateService = async (from = "es", message, llamada, number) => {
   const tablaTraducciones = document.getElementById(`tradu${number}`);
-  const toLanguage = ["en", "es", "fr", "zh-Hans"];
-  const languages = ["Inglés", "Español", "Francés", "Chino"];
+  const toLanguage = ["en", "es", "fr", "zh-Hans", "pt"];
+  const languages = ["Inglés", "Español", "Francés", "Chino", "Portugués"];
 
   try {
     await fetch(
@@ -174,12 +183,11 @@ const translateService = async (from = "es", message, llamada, number) => {
       .then((response) => response.json())
       .then((data) => {
         if (llamada == "tabla") {
-          if (!url.includes("analize.html")) {
+          if (URLactual.includes("detecting.html")) {
             const description = document.getElementById(
               `image_description${number}`
             );
             description.textContent = data[0].translations[1].text;
-            console.log(data[0].translations[1]);
           }
           tablaTraducciones.textContent = "";
           console.log(data);
@@ -245,6 +253,11 @@ async function speech(mensaje, index) {
           <voice xml:lang='zh-CN-henan' xml:gender='Female' name='zh-CN-henan-YundengNeural'>${mensaje} </voice>
         </speak>`;
       break;
+    case 4:
+      var ssml = `<speak version='1.0' xml:lang='pt-PT'>
+         <voice xml:lang='pt-PT' xml:gender='Female' name='pt-PT-FernandaNeural'>${mensaje} </voice>
+       </speak>`;
+      break;
     default:
       break;
   }
@@ -268,4 +281,82 @@ async function speech(mensaje, index) {
       const audioTag = document.getElementById("audio");
       audioTag.src = urlAudio;
     });
+}
+
+function faceREcognition() {
+  data = { url: "https://blog.hubspot.es/hubfs/media/buyerpersona.jpeg" };
+  const url = "https://faceserviceforreto.cognitiveservices.azure.com/";
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Ocp-Apim-Subscription-Key": "36b47e20b0c74ac7ba87b61de22f39dc",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((data) => console.log(data));
+}
+
+faceREcognition();
+
+function sendMessage() {
+  const userMessage = messageInput.value.toLowerCase();
+  if (userMessage.trim() !== "") {
+    displayMessage("Tú: " + messageInput.value, "user");
+
+    botRequest(userMessage);
+
+    messageInput.value = "";
+  }
+}
+
+function displayMessage(message, sender) {
+  const messageElement = document.createElement("div");
+  messageElement.className =
+    sender === "user" ? "alert alert-success text-right " : "alert alert-info text-left";
+  messageElement.textContent = message;
+  chatBox.appendChild(messageElement);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+async function botRequest(userMessage) {
+  data = {
+    top: 1,
+    question: " " + userMessage + " ",
+    includeUnstructuredSources: true,
+    confidenceScorehreshold: 0,
+    answerSpanRequest: {
+      enable: true,
+      topAnswersWithSpan: 0,
+      confidenceScorehreshold: 1,
+    },
+    filters: {
+      metadataFilter: {
+        logicalOperation: "AND",
+      },
+    },
+  };
+  url =
+    "https://chatbotforretoia.cognitiveservices.azure.com/language/:query-knowledgebases?projectName=chatbotretoia&api-version=2021-10-01&deploymentName=test";
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Ocp-Apim-Subscription-Key": "e50b474a942b4fdf985f77c5a0f75408",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const botResponse = data.answers[0].answer;
+      displayMessage("Bot: " + botResponse, "bot");
+    });
+}
+
+
+function showBot(){
+  const bot= document.getElementById('divBot')
+  bot.classList.remove("hidden")
+  bot.classList.add('show')
 }
