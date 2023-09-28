@@ -397,7 +397,7 @@ const objectDetection = async (arrayBuffer, img, number) => {
               const width = boundingBox.width * canvasWidth;
               const height = boundingBox.height * canvasHeight;
 
-              ctx.strokeStyle = color + "3c";
+              ctx.strokeStyle = color + "9c";
               ctx.lineWidth = 5;
               ctx.beginPath();
               ctx.rect(x, y, width, height);
@@ -434,8 +434,8 @@ function displayMessage(message, sender) {
   const messageElement = document.createElement("div");
   messageElement.className =
     sender === "user"
-      ? "alert alert-success text-right"
-      : "alert alert-info text-left";
+      ? "alert alert-success text-right user"
+      : "alert alert-info text-left bot";
   messageElement.textContent = message;
   chatBox.appendChild(messageElement);
   chatBox.scrollTop = chatBox.scrollHeight;

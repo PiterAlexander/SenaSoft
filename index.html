@@ -20,7 +20,7 @@
 
     <title>The mind's eyes</title>
 
-    <link href="main.css" rel="stylesheet" />
+    <link href="./assets/main.css" rel="stylesheet" />
   </head>
 
   <body>
@@ -220,12 +220,18 @@
                 <span aria-hidden="true">&times;</span
                 ><span class="sr-only">Cerrar</span>
               </button>
-              <h3 class="modal-title" id="myModalLabel">ChatBot</h3>
+              <h3 class="modal-title" style="color: #1763e9" id="myModalLabel">
+                ChatBot
+              </h3>
             </div>
             <div
               class="modal-body text-center hidden"
               id="divBot"
-              style="border: 1px solid black; padding: 20px 50px"
+              style="
+                border: 1px solid #1763e9;
+                padding: 20px 50px;
+                border-radius: 10px;
+              "
             >
               <div
                 class="chat-container h-100 p-3"
@@ -285,7 +291,7 @@
       });
     </script>
 
-    <script type="text/javascript" src="./main.js"></script>
-    <script type="text/javascript" src="./services.js"></script>
+    <script type="text/javascript" src="./assets/main.js"></script>
+    <script type="text/javascript" src="./assets/services.js"></script>
   </body>
 </html>
