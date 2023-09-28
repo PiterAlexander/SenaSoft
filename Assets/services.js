@@ -43,6 +43,8 @@ const callMethod = async (event, number) => {
   // Se obtiene el canvas asociado a cada input
   canvas = document.getElementById(`imagen${number}`);
   ctx = canvas.getContext("2d");
+  canvas.width = 500
+  canvas.height = 500
 
   // Creación de variables para el buffer y el código en base 64
   let arrayBuffer;
@@ -79,11 +81,24 @@ const callMethod = async (event, number) => {
   // Cuando la imagen se cargue, se dibuja en el canvas
   img.onload = async () => {
     ctx.drawImage(img, 0, 0, 500, 500);
+    // const res = await fetch(ctx.canvas.toDataURL(archivo.type))
+    // const buffer = await res.arrayBuffer()
+    // const arrayBuffer = new Uint8Array(buffer)
+    // await facesService(arrayBuffer, img, number);
   };
 
   // Se llama el servicio correspondiente a cada ruta
   if (URLactual.includes("faces.html")) {
-    await facesService(arrayBuffer, img, number);
+    img.onload = async () => {
+      ctx.drawImage(img, 0, 0, 500, 500);
+      if(number != 3){
+        const res = await fetch(ctx.canvas.toDataURL(archivo.type))
+        const buffer = await res.arrayBuffer()
+        const arrayBuffer = new Uint8Array(buffer)
+      }
+      await facesService(arrayBuffer, img, number);
+
+    };
   } else if (URLactual.includes("detecting.html")) {
     await objectDetection(arrayBuffer, img, number);
     await imageAnalyze(arrayBuffer, number);
@@ -403,6 +418,7 @@ const speech = async (mensaje, index) => {
  * @param {Number} number Identificador de la sección
  */
 const facesService = async (arrayBuffer, img, number) => {
+  const data = { Url: "" + input3.value + "" };
   // Creación del endpoint
   const url =
     "https://faceserviceforretoia.cognitiveservices.azure.com/face/v1.0/detect?detectionModel=detection_01";
@@ -410,7 +426,8 @@ const facesService = async (arrayBuffer, img, number) => {
   // Se crean los headers
   const headers = {
     "Ocp-Apim-Subscription-Key": "6850e40320da4781bd445c51f074ff6b",
-    "Content-Type": "application/octet-stream",
+    "Content-Type":
+      number == 3 ? "application/json" : "application/octet-stream",
   };
 
   const image = img;
@@ -418,10 +435,11 @@ const facesService = async (arrayBuffer, img, number) => {
   fetch(url, {
     method: "POST",
     headers: headers,
-    body: arrayBuffer,
+    body: number == 3 ? JSON.stringify(data) : arrayBuffer,
   })
     .then((response) => response.json())
     .then(async (data) => {
+      console.log(data)
       const faces = data;
 
       // Se obtiene el canvas correspondiente a la sección
@@ -430,7 +448,7 @@ const facesService = async (arrayBuffer, img, number) => {
 
       // Se dibuja la imagen
       ctx.drawImage(image, 0, 0, 500, 500);
-
+console.log(image);
       // Se válida si hay rostros detectados
       if (faces.length > 0) {
         // Creación de un recuadro en cada rostro detectado
