@@ -3,18 +3,13 @@ const input1 = document.getElementById("img_file1");
 const input2 = document.getElementById("img_file2");
 const input3 = document.getElementById("img_file3");
 const input4 = document.getElementById("img_file4");
-const chatBox = document.getElementById("chatBox");
-const messageInput = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
 
-sendButton.addEventListener("click", sendMessage);
-messageInput.addEventListener("keydown", function (event) {
-  if (event.key === "Enter") {
-    sendMessage();
-  }
-});
 var canvas;
 var ctx;
+
+var chatBox;
+var messageInput;
+var sendButton;
 
 input1.addEventListener("change", async (event) => {
   callMethod(event, 1);
@@ -283,23 +278,6 @@ async function speech(mensaje, index) {
     });
 }
 
-function faceREcognition() {
-  data = { url: "https://blog.hubspot.es/hubfs/media/buyerpersona.jpeg" };
-  const url = "https://faceserviceforreto.cognitiveservices.azure.com/";
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Ocp-Apim-Subscription-Key": "36b47e20b0c74ac7ba87b61de22f39dc",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => response.json())
-    .then((data) => console.log(data));
-}
-
-faceREcognition();
-
 function sendMessage() {
   const userMessage = messageInput.value.toLowerCase();
   if (userMessage.trim() !== "") {
@@ -314,7 +292,9 @@ function sendMessage() {
 function displayMessage(message, sender) {
   const messageElement = document.createElement("div");
   messageElement.className =
-    sender === "user" ? "alert alert-success text-right " : "alert alert-info text-left";
+    sender === "user"
+      ? "alert alert-success text-right "
+      : "alert alert-info text-left";
   messageElement.textContent = message;
   chatBox.appendChild(messageElement);
   chatBox.scrollTop = chatBox.scrollHeight;
@@ -354,9 +334,19 @@ async function botRequest(userMessage) {
     });
 }
 
+function showBot() {
+  const bot = document.getElementById("divBot");
+  bot.classList.remove("hidden");
+  bot.classList.add("show");
 
-function showBot(){
-  const bot= document.getElementById('divBot')
-  bot.classList.remove("hidden")
-  bot.classList.add('show')
+  chatBox = document.getElementById("chatBox");
+  messageInput = document.getElementById("messageInput");
+  sendButton = document.getElementById("sendButton");
+
+  sendButton.addEventListener("click", sendMessage);
+  messageInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      sendMessage();
+    }
+  });
 }
