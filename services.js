@@ -40,16 +40,27 @@ async function callMethod(event, number) {
     reader.readAsDataURL(archivo);
 
     arrayBuffer = await archivo.arrayBuffer();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const img = new Image();
+    img.src = number == 3 ? input3.value : base64Code;
+
+    img.width = 500;
+    img.height = 500;
+    img.onload = async () => {
+      ctx.drawImage(img, 0, 0, 500, 500);
+      const res = await fetch(ctx.canvas.toDataURL(archivo.type));
+      const buffer = await res.arrayBuffer();
+      const arrayBuffer = new Uint8Array(buffer);
+    };
+
+    if (URLactual.includes("faces.html")) {
+      await facesService(arrayBuffer, img, number);
+    } else if (URLactual.includes("detecting.html")) {
+      await objectDetection(arrayBuffer, img, number);
+      await imageAnalyze(arrayBuffer, number);
+    }
   }
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const img = new Image();
-  img.src = number == 3 ? input3.value : base64Code;
 
-  img.onload = () => {
-    ctx.drawImage(img, 0, 0);
-  };
-
-  await imageAnalyze(arrayBuffer, number);
   if (URLactual.includes("analize.html")) {
     await imageClassify(arrayBuffer, number);
   }
@@ -81,19 +92,18 @@ const imageAnalyze = async (arrayBuffer, number) => {
         },
       } = data;
 
-      console.log(imageDescription);
+      // ctx.font = "bold 30px Arial";
 
-      ctx.font = "bold 30px Arial";
+      // if (objects.length > 0) {
+      //   console.log(objects);
+      //   objects.forEach(({ rectangle: { x, y, w, h } }) => {
+      //     ctx.fillStyle = "#7cd9ab4c";
+      //     ctx.fillRect(x, y, w, h);
+      //   });
+      // }
 
-      if (objects.length > 0) {
-        console.log(objects);
-        objects.forEach(({ rectangle: { x, y, w, h } }) => {
-          ctx.fillStyle = "#7cd9ab4c";
-          ctx.fillRect(x, y, w, h);
-        });
-      }
       if (URLactual.includes("detecting.html")) {
-        translateService("en", imageDescription, "tabla", number);
+        translateService("en", imageDescription[0].toUpperCase() + imageDescription.slice(1), "tabla", number);
       }
     })
     .catch((e) => {
@@ -263,8 +273,6 @@ async function speech(mensaje, index) {
     "X-Microsoft-OutputFormat": "audio-16khz-128kbitrate-mono-mp3",
   };
 
-  const outputFile = "output.mp3";
-
   await fetch(url, {
     method: "POST",
     headers,
@@ -277,6 +285,124 @@ async function speech(mensaje, index) {
       audioTag.src = urlAudio;
     });
 }
+
+const facesService = async (arrayBuffer, img, number) => {
+  url =
+    "https://faceserviceforretoia.cognitiveservices.azure.com/face/v1.0/detect?detectionModel=detection_01";
+
+  headers = {
+    "Ocp-Apim-Subscription-Key": "6850e40320da4781bd445c51f074ff6b",
+    "Content-Type": "application/octet-stream",
+  };
+
+  const image = img;
+
+  fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: arrayBuffer,
+  })
+    .then((response) => response.json())
+    .then(async (data) => {
+      console.log(data);
+      const faces = data;
+
+      const canvas = document.getElementById(`imagen${number}`);
+      console.log(canvas);
+      const ctx = canvas.getContext("2d");
+
+      ctx.drawImage(image, 0, 0, 500, 500);
+
+      if (faces.length > 0) {
+        faces.forEach(({ faceRectangle: { top, left, width, height } }) => {
+          ctx.strokeStyle = "#00ff00";
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.rect(left, top, width, height);
+          ctx.stroke();
+        });
+      }
+    })
+    .catch((e) => {
+      console.error("Error: " + e);
+      alert("Archivo no permitido");
+    });
+};
+
+const objectDetection = async (arrayBuffer, img, number) => {
+  url =
+    "https://retoiaservices.cognitiveservices.azure.com/customvision/v3.0/Prediction/b7c5d5d1-1737-418a-aeae-52c07fdcf680/detect/iterations/Iteration1/image";
+
+  headers = {
+    "Prediction-Key": "3b2847d34e1b4f57a130116a64f3f45e",
+    "Content-Type": "application/octet-stream",
+  };
+
+  const image = img;
+
+  fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: arrayBuffer,
+  })
+    .then((response) => response.json())
+    .then(async (data) => {
+      const { predictions } = data;
+
+      const canvas = document.getElementById(`imagen${number}`);
+      const ctx = canvas.getContext("2d");
+
+      ctx.drawImage(image, 0, 0, 500, 500);
+      ctx.font = "bold 20px sans-serif";
+
+      if (predictions.length > 0) {
+        predictions.sort((a, b) => b.probability - a.probability);
+
+        predictions.forEach(
+          ({
+            boundingBox: { left, top, width, height },
+            probability,
+            boundingBox,
+            tagName,
+          }) => {
+            if (probability * 100 >= 70) {
+              const color =
+                tagName == "Persona"
+                  ? "#00ff00"
+                  : tagName == "Pato"
+                  ? "#0000ff"
+                  : "#ff00ff";
+
+              const canvasWidth = canvas.width;
+              const canvasHeight = canvas.height;
+
+              const x = boundingBox.left * canvasHeight;
+              const y = boundingBox.top * canvasHeight;
+
+              const width = boundingBox.width * canvasWidth;
+              const height = boundingBox.height * canvasHeight;
+
+              ctx.strokeStyle = color + "3c";
+              ctx.lineWidth = 5;
+              ctx.beginPath();
+              ctx.rect(x, y, width, height);
+              ctx.stroke();
+
+              ctx.textAlign = "center";
+              ctx.textBaseline = "middle";
+              ctx.fillStyle = color;
+
+              ctx.fillText(tagName, x + width / 2, y + height / 2);
+            }
+          }
+        );
+      }
+    })
+    .catch((e) => {
+      console.error("Error: " + e);
+      alert("Archivo no permitido");
+    });
+};
 
 function sendMessage() {
   const userMessage = messageInput.value.toLowerCase();
@@ -293,7 +419,7 @@ function displayMessage(message, sender) {
   const messageElement = document.createElement("div");
   messageElement.className =
     sender === "user"
-      ? "alert alert-success text-right "
+      ? "alert alert-success text-right"
       : "alert alert-info text-left";
   messageElement.textContent = message;
   chatBox.appendChild(messageElement);
