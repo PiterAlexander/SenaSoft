@@ -1,4 +1,8 @@
+
+// Se obtiene la dirección actual para validar que me servicios se usan.
 const URLactual = window.location.toString();
+
+// Se obtienen los inputs de los archivos
 const input1 = document.getElementById("img_file1");
 const input2 = document.getElementById("img_file2");
 const input3 = document.getElementById("img_file3");
@@ -11,26 +15,39 @@ var chatBox;
 var messageInput;
 var sendButton;
 
+// Se crean los eventos para cada archivo
 input1.addEventListener("change", async (event) => {
-  callMethod(event, 1);
+  callMethod(event, 1); 
 });
 input2.addEventListener("change", async (event) => {
   callMethod(event, 2);
 });
+
+// Input para la usar la url de la imagen
 input3.addEventListener("change", async (event) => {
   callMethod(event, 3);
 });
+
 input4.addEventListener("change", async (event) => {
   callMethod(event, 4);
 });
 
+// Método para mostrar la imagen y llamar el servicio correspondiente
 async function callMethod(event, number) {
+  // Se obtiene el canvas asociado a cada input
   canvas = document.getElementById(`imagen${number}`);
   ctx = canvas.getContext("2d");
+
+  // Se obtiene le 
   var arrayBuffer;
   let base64Code = "";
+
+  // Si el input no es el de url se obtiene la imagen de manera local 
   if (number != 3) {
+    // Se obtiene el archivo
     const archivo = event.target.files[0];
+
+    // Se crea un reader para obtener el código en base64 de la imagen
     const reader = new FileReader();
 
     reader.addEventListener("loadend", () => {
@@ -103,7 +120,12 @@ const imageAnalyze = async (arrayBuffer, number) => {
       // }
 
       if (URLactual.includes("detecting.html")) {
-        translateService("en", imageDescription[0].toUpperCase() + imageDescription.slice(1), "tabla", number);
+        translateService(
+          "en",
+          imageDescription[0].toUpperCase() + imageDescription.slice(1),
+          "tabla",
+          number
+        );
       }
     })
     .catch((e) => {
@@ -237,29 +259,30 @@ const translateService = async (from = "es", message, llamada, number) => {
 
 async function speech(mensaje, index) {
   url = `https://eastus.tts.speech.microsoft.com/cognitiveservices/v1`;
+  let ssml = "";
   switch (index) {
     case 0:
-      var ssml = `<speak version='1.0' xml:lang='en-US'>
+      ssml = `<speak version='1.0' xml:lang='en-US'>
           <voice xml:lang='en-US' xml:gender='Female' name='en-US-EmmaNeural'>${mensaje} </voice>
         </speak>`;
       break;
     case 1:
-      var ssml = `<speak version='1.0' xml:lang='es-Co'>
+      ssml = `<speak version='1.0' xml:lang='es-Co'>
       <voice xml:lang='es-Co' xml:gender='Female' name='es-CO-SalomeNeural'>${mensaje} </voice>
     </speak>`;
       break;
     case 2:
-      var ssml = `<speak version='1.0' xml:lang='fr-FR'>
+      ssml = `<speak version='1.0' xml:lang='fr-FR'>
         <voice xml:lang='fr-FR' xml:gender='Female' name='fr-FR-BrigitteNeural'>${mensaje} </voice>
       </speak>`;
       break;
     case 3:
-      var ssml = `<speak version='1.0' xml:lang='zh-CN-henan'>
+      ssml = `<speak version='1.0' xml:lang='zh-CN-henan'>
           <voice xml:lang='zh-CN-henan' xml:gender='Female' name='zh-CN-henan-YundengNeural'>${mensaje} </voice>
         </speak>`;
       break;
     case 4:
-      var ssml = `<speak version='1.0' xml:lang='pt-PT'>
+      ssml = `<speak version='1.0' xml:lang='pt-PT'>
          <voice xml:lang='pt-PT' xml:gender='Female' name='pt-PT-FernandaNeural'>${mensaje} </voice>
        </speak>`;
       break;
