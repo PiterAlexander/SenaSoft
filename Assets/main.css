@@ -5881,6 +5881,16 @@ img[data-action="zoom"] {
   -o-transition: all 0.3s;
   transition: all 0.3s;
 }
+input[type="file"], #img_file3 {
+  width: 500px;
+  border: none;
+  outline: hidden !important;
+  margin: auto;
+}
+
+#img_file3 {
+  border: #1763e9 solid 1px;
+}
 
 img.zoom-img {
   cursor: pointer;

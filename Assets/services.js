@@ -199,7 +199,7 @@ const imageClassify = async (arrayBuffer, number) => {
       tablaProbabilidades.textContent = "";
 
       // Creación de una fila por cada prediction obtenida
-      predictions.forEach((prediction) => {
+      predictions.forEach(({ tagName, probability }) => {
         // Creación del elemento para la fila
         const registro = document.createElement("tr");
 
@@ -207,14 +207,14 @@ const imageClassify = async (arrayBuffer, number) => {
         const campoObjeto = document.createElement("td");
 
         // Se asigna el valor de la etiqueta a la columna de objeto
-        campoObjeto.textContent = prediction.tagName;
+
+        campoObjeto.textContent = tagName == "Negative" ? "Otro" : tagName;
 
         // Creación del elemento para la columna
         const campoProbabilidad = document.createElement("td");
 
         // Se asigna el valor de la probabilidad a la columna de probabilidad y redondea el valor
-        campoProbabilidad.textContent =
-          Math.round(prediction.probability * 100) + "%";
+        campoProbabilidad.textContent = Math.round(probability * 100) + "%";
 
         // Se asigna cada elemento creado a la fila
         registro.appendChild(campoObjeto);
@@ -546,11 +546,10 @@ const objectDetection = async (arrayBuffer, img, number) => {
 /**
  * Función para enviar el mensaje al chatbot
  */
-const sendMessage = () => {
+function sendMessage() {
   const userMessage = messageInput.value.toLowerCase();
-	// Validación de si el valor está vacío
+  // Validación de si el valor está vacío
   if (userMessage.trim() !== "") {
-
     // Se muestra el mensaje
     displayMessage("Tú: " + messageInput.value, "user");
 
@@ -560,14 +559,14 @@ const sendMessage = () => {
     // Se reinicia el valor del input
     messageInput.value = "";
   }
-};
+}
 
 /**
  * Función para mostrar el mensaje
  * @param {String} message
  * @param {String} sender Es quien envía el mensaje, si el chatbot o el usuario
  */
-const displayMessage = (message, sender) => {
+function displayMessage(message, sender) {
   const messageElement = document.createElement("div");
   // Dependiendo del sender se muestra un estilo de mensaje
   messageElement.className =
@@ -581,13 +580,13 @@ const displayMessage = (message, sender) => {
   // Asignación del mensaje al chatBox y se realiza un auto scroll hacía abajo
   chatBox.appendChild(messageElement);
   chatBox.scrollTop = chatBox.scrollHeight;
-};
+}
 
 /**
  * Función para realizar la petición al chatbot
  * @param {String} userMessage
  */
-const botRequest = async (userMessage) => {
+async function botRequest(userMessage) {
   // Creación del JSON que será enviado
   const data = {
     top: 1,
@@ -623,12 +622,12 @@ const botRequest = async (userMessage) => {
       const botResponse = data.answers[0].answer;
       displayMessage("Bot: " + botResponse, "bot");
     });
-};
+}
 
 /**
  * Función para mostrar u ocultar el bot
  */
-const showBot = () => {
+function showBot() {
   const bot = document.getElementById("divBot");
   bot.classList.remove("hidden");
   bot.classList.add("show");
@@ -643,4 +642,4 @@ const showBot = () => {
       sendMessage();
     }
   });
-};
+}
