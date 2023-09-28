@@ -6,6 +6,8 @@ const input4 = document.getElementById("img_file4");
 
 var canvas;
 var ctx;
+var archivo;
+var reader;
 
 var chatBox;
 var messageInput;
@@ -30,8 +32,8 @@ async function callMethod(event, number) {
   var arrayBuffer;
   let base64Code = "";
   if (number != 3) {
-    const archivo = event.target.files[0];
-    const reader = new FileReader();
+    archivo = event.target.files[0];
+    reader = new FileReader();
 
     reader.addEventListener("loadend", () => {
       base64Code = reader.result;
@@ -40,25 +42,27 @@ async function callMethod(event, number) {
     reader.readAsDataURL(archivo);
 
     arrayBuffer = await archivo.arrayBuffer();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const img = new Image();
-    img.src = number == 3 ? input3.value : base64Code;
+  }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const img = new Image();
+  img.src = number == 3 ? input3.value : base64Code;
 
-    img.width = 500;
-    img.height = 500;
-    img.onload = async () => {
-      ctx.drawImage(img, 0, 0, 500, 500);
+  img.width = 500;
+  img.height = 500;
+  img.onload = async () => {
+    ctx.drawImage(img, 0, 0, 500, 500);
+    if (number != 3) {
       const res = await fetch(ctx.canvas.toDataURL(archivo.type));
       const buffer = await res.arrayBuffer();
       const arrayBuffer = new Uint8Array(buffer);
-    };
-
-    if (URLactual.includes("faces.html")) {
-      await facesService(arrayBuffer, img, number);
-    } else if (URLactual.includes("detecting.html")) {
-      await objectDetection(arrayBuffer, img, number);
-      await imageAnalyze(arrayBuffer, number);
     }
+  };
+
+  if (URLactual.includes("faces.html")) {
+    await facesService(arrayBuffer, img, number);
+  } else if (URLactual.includes("detecting.html")) {
+    await objectDetection(arrayBuffer, img, number);
+    await imageAnalyze(arrayBuffer, number);
   }
 
   if (URLactual.includes("analize.html")) {
@@ -103,7 +107,12 @@ const imageAnalyze = async (arrayBuffer, number) => {
       // }
 
       if (URLactual.includes("detecting.html")) {
-        translateService("en", imageDescription[0].toUpperCase() + imageDescription.slice(1), "tabla", number);
+        translateService(
+          "en",
+          imageDescription[0].toUpperCase() + imageDescription.slice(1),
+          "tabla",
+          number
+        );
       }
     })
     .catch((e) => {
@@ -330,20 +339,26 @@ const facesService = async (arrayBuffer, img, number) => {
 };
 
 const objectDetection = async (arrayBuffer, img, number) => {
-  url =
+  const data = { Url: "" + input3.value + "" };
+
+  detectByUrl =
+    "https://retoiaservices.cognitiveservices.azure.com/customvision/v3.0/Prediction/b7c5d5d1-1737-418a-aeae-52c07fdcf680/detect/iterations/Iteration1/url";
+
+  detectByImage =
     "https://retoiaservices.cognitiveservices.azure.com/customvision/v3.0/Prediction/b7c5d5d1-1737-418a-aeae-52c07fdcf680/detect/iterations/Iteration1/image";
 
   headers = {
     "Prediction-Key": "3b2847d34e1b4f57a130116a64f3f45e",
-    "Content-Type": "application/octet-stream",
+    "Content-Type":
+      number == 3 ? "application/json" : "application/octet-stream",
   };
 
   const image = img;
 
-  fetch(url, {
+  fetch(number == 3 ? detectByUrl : detectByImage, {
     method: "POST",
     headers: headers,
-    body: arrayBuffer,
+    body: number == 3 ? JSON.stringify(data) : arrayBuffer,
   })
     .then((response) => response.json())
     .then(async (data) => {
