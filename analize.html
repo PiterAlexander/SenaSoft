@@ -6,41 +6,37 @@
     <meta content="width=device-width,initial-scale=1" name="viewport" />
     <meta content="description" name="description" />
     <meta name="google" content="notranslate" />
+
+    <!-- Creditos para el autor de la plantilla -->
     <meta
       content="Mashup templates have been developped by Orson.io team"
       name="author"
+    />
+    <meta
+      content="This beautiful clean Free Bootstrap Agency Template was built by MashUp Templates. URl= https://themewagon.com/author/mashuptemplate/"
+      name="site"
     />
 
     <!-- Disable tap highlight on IE -->
     <meta name="msapplication-tap-highlight" content="no" />
 
+    <!-- Icono de la página -->
     <link href="./assets/Primary-Icon-Dark.png" rel="icon" />
 
-    <link href="" rel="stylesheet" />
+    <!-- Nombre de la página -->
+    <title>The mind's eyes</title>
 
-    <title>The Mind's Eyes</title>
-
+    <!-- Referencia del archivo CSS que utiliza -->
     <link href="./assets/main.css" rel="stylesheet" />
   </head>
 
   <body>
-    <!-- Add your content of header -->
+    <!-- Header donde se encuentra el icono, titulo y secciones de la pagina -->
     <header>
       <nav class="navbar navbar-default active">
         <div class="container">
+          <!-- Icono y Titulo -->
           <div class="navbar-header">
-            <button
-              type="button"
-              class="navbar-toggle collapsed"
-              data-toggle="collapse"
-              data-target="#navbar-collapse"
-              aria-expanded="false"
-            >
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
             <a class="navbar-brand" href="./index.html" title="">
               <img
                 src="./assets/Primary-Icon.png"
@@ -52,6 +48,7 @@
             </a>
           </div>
 
+          <!-- Secciones -->
           <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
               <li><a href="./index.html" title="">Inicio</a></li>
@@ -62,15 +59,25 @@
       </nav>
     </header>
 
+    <!-- Contenido principal -->
     <div class="section-container">
+      <!-- Etiqueta para cargar y reproducir el audio de la traducción -->
+      <audio src="" id="audio" autoplay></audio>
       <div class="container w-100">
+        <!-- Titulo del Servicio -->
         <h1 class="text-center">Clasificación de Imágenes</h1>
         <hr />
+
+        <!-- Contenedor de las dos primeras secciones del modulo -->
         <div class="row w-100">
           <div class="col-xs-12 col-md-5">
             <div class="row">
+              <!-- Contenedor de la imagen y el input de la sección -->
               <div id="image_container" class="form-group text-center">
+                <!-- Titulo de la sección -->
                 <h2 class="text-center">Imagen 1</h2>
+
+                <!-- Contenedor de la imagen que se está evaluando -->
                 <canvas
                   id="imagen1"
                   width="500"
@@ -84,6 +91,8 @@
                     width="500"
                     height="500"
                 /></canvas>
+
+                <!-- Input donde el usuario podrá subir su imagen -->
                 <input
                   type="file"
                   accept="jpeg,png,bmp"
@@ -94,8 +103,8 @@
               </div>
             </div>
             <div class="row text-center">
+              <!-- Tabla de probabilidades en donde se puede obrevar que porcentaje puede ser de una entidad u otra -->
               <h2>Probabilidades</h2>
-
               <table class="table table-dark table-hover mt-3 text-center mx-1">
                 <thead>
                   <tr>
@@ -105,6 +114,8 @@
                 </thead>
                 <tbody id="info1"></tbody>
               </table>
+
+              <!-- Tabla de traducciones en donde se puede observar si hayamos alguna entidad en la imagen y donde podra reproducir el audio de dicha traducción-->
               <h2>Traducción</h2>
               <table class="table table-dark table-hover mt-3 text-center mx-1">
                 <thead>
@@ -116,14 +127,16 @@
                 </thead>
                 <tbody id="tradu1"></tbody>
               </table>
-              <audio src="" id="audio" autoplay></audio>
             </div>
           </div>
-          <div class="col-xs-12 col-md-2"></div>
-          <div class="col-xs-12 col-md-5">
+          <div class="col-xs-12 col-md-5 col-sm-offset-2">
             <div class="row">
+              <!-- Contenedor de la imagen y el input de la sección -->
               <div id="image_container" class="form-group text-center">
+                <!-- Titulo de la sección -->
                 <h2 class="text-center">Imagen 2</h2>
+
+                <!-- Contenedor de la imagen que se está evaluando -->
                 <canvas
                   id="imagen2"
                   width="500"
@@ -137,6 +150,8 @@
                     width="500"
                     height="500"
                 /></canvas>
+
+                <!-- Input donde el usuario podrá subir su imagen -->
                 <input
                   type="file"
                   accept="jpeg,png,bmp"
@@ -147,8 +162,8 @@
               </div>
             </div>
             <div class="row text-center">
+              <!-- Tabla de probabilidades en donde se puede obrevar que porcentaje puede ser de una entidad u otra -->
               <h2>Probabilidades</h2>
-
               <table class="table table-dark table-hover mt-3 text-center mx-1">
                 <thead>
                   <tr>
@@ -158,6 +173,8 @@
                 </thead>
                 <tbody id="info2"></tbody>
               </table>
+
+              <!-- Tabla de traducciones en donde se puede observar si hayamos alguna entidad en la imagen y donde podra reproducir el audio de dicha traducción-->
               <h2>Traducción</h2>
               <table class="table table-dark table-hover mt-3 text-center mx-1">
                 <thead>
@@ -172,12 +189,20 @@
             </div>
           </div>
         </div>
+
+        <!-- Separador de las dos secciones del modulo -->
         <hr />
+
+        <!-- Contenedor de las dos últimas secciones del modulo -->
         <div class="row w-100">
           <div class="col-xs-12 col-md-5">
             <div class="row">
+              <!-- Contenedor de la imagen y el input de la sección -->
               <div id="image_container" class="form-group text-center">
+                <!-- Titulo de la sección -->
                 <h2 class="text-center">Imagen 3</h2>
+
+                <!-- Contenedor de la imagen que se está evaluando -->
                 <canvas
                   id="imagen3"
                   width="500"
@@ -191,6 +216,8 @@
                     width="500"
                     height="500"
                 /></canvas>
+
+                <!-- Input donde el usuario podrá adjuntar un Link de una imagen para evaluarla -->
                 <input
                   type="text"
                   name="img_file3"
@@ -201,8 +228,8 @@
               </div>
             </div>
             <div class="row text-center">
+              <!-- Tabla de probabilidades en donde se puede obrevar que porcentaje puede ser de una entidad u otra -->
               <h2>Probabilidades</h2>
-
               <table class="table table-dark table-hover mt-3 text-center mx-1">
                 <thead>
                   <tr>
@@ -212,6 +239,8 @@
                 </thead>
                 <tbody id="info3"></tbody>
               </table>
+
+              <!-- Tabla de traducciones en donde se puede observar si hayamos alguna entidad en la imagen y donde podra reproducir el audio de dicha traducción-->
               <h2>Traducción</h2>
               <table class="table table-dark table-hover mt-3 text-center mx-1">
                 <thead>
@@ -225,12 +254,15 @@
               </table>
             </div>
           </div>
-          <div class="col-xs-12 col-md-2"></div>
-          <div class="col-xs-12 col-md-5">
+
+          <div class="col-xs-12 col-md-5 col-sm-offset-2">
             <div class="row">
+              <!-- Contenedor de la imagen y el input de la sección -->
               <div id="image_container" class="form-group text-center">
+                <!-- Titulo de la sección -->
                 <h2 class="text-center">Imagen 4</h2>
 
+                <!-- Contenedor de la imagen que se está evaluando -->
                 <canvas
                   id="imagen4"
                   width="500"
@@ -244,6 +276,8 @@
                     width="500"
                     height="500"
                 /></canvas>
+
+                <!-- Input donde el usuario podrá subir su imagen -->
                 <input
                   type="file"
                   accept="jpeg,png,bmp"
@@ -254,8 +288,8 @@
               </div>
             </div>
             <div class="row text-center">
+              <!-- Tabla de probabilidades en donde se puede obrevar que porcentaje puede ser de una entidad u otra -->
               <h2>Probabilidades</h2>
-
               <table class="table table-dark table-hover mt-3 text-center mx-1">
                 <thead>
                   <tr>
@@ -265,6 +299,8 @@
                 </thead>
                 <tbody id="info4"></tbody>
               </table>
+
+              <!-- Tabla de traducciones en donde se puede observar si hayamos alguna entidad en la imagen y donde podra reproducir el audio de dicha traducción-->
               <h2>Traducción</h2>
               <table class="table table-dark table-hover mt-3 text-center mx-1">
                 <thead>
@@ -282,15 +318,31 @@
       </div>
     </div>
 
+    <!-- Footer de la pagina, donde se encuentran los créditos de la plantilla y nombre de la competencia -->
     <footer class="footer-container white-text-container">
       <div class="container">
+        <!-- Nombre de la competencia -->
         <div class="row">
           <div class="col-xs-12">
-            <h3>The Mind's Eyes</h3>
+            <div class="row text-center">
+              <div class="col-xs-12 col-lg-12">
+                <h1>&lt;<strong>SENA</strong>/Soft&gt; 2023</h1>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <div class="row">
-              <div class="col-xs-12 col-sm-7">
-                <p>&lt;<strong>SENA</strong>/Soft&gt; 2023</p>
+        <!-- Creditos plantilla -->
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="row text-center">
+              <div class="col-xs-12 col-lg-12">
+                <p>
+                  Plantilla tomada de:
+                  <a href="https://themewagon.com/author/mashuptemplate/">
+                    MashUp Templates.</a
+                  >
+                </p>
               </div>
             </div>
           </div>
@@ -298,6 +350,7 @@
       </div>
     </footer>
 
+    <!-- Animación del header -->
     <script>
       document.addEventListener("DOMContentLoaded", function (event) {
         navActivePage();
@@ -305,7 +358,8 @@
       });
     </script>
 
+    <!-- Referencia de los archivos JavaScript que se utilizan -->
     <script type="text/javascript" src="./assets/main.js"></script>
-    <script src="./assets/services.js"></script>
+    <script type="text/javascript" src="./assets/services.js"></script>
   </body>
 </html>
